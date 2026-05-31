@@ -1,41 +1,112 @@
-# To know more about the Task class, visit: https://docs.crewai.com/concepts/tasks
+"""
+任务定义文件 (Tasks)
+====================
+本文件定义了项目中所有代理需要执行的任务（Task）。
+
+什么是 Task（任务）？
+----------------------
+Task 是 CrewAI 中的工作单元，代表一个具体的、可执行的工作项。
+每个 Task 拥有：
+- description（描述）：任务的详细说明，告诉代理要做什么
+- expected_output（预期输出）：期望的输出格式和内容
+- agent（执行者）：负责执行此任务的代理
+- tools（工具）：任务专属的工具（可选，也可使用代理自带的工具）
+- context（上下文）：依赖的其他任务输出（用于任务链）
+
+任务设计原则：
+- 任务描述要具体、清晰
+- 明确指定预期输出的格式
+- 合理设置任务间的依赖关系（通过 context）
+"""
+
 from crewai import Task
-from textwrap import dedent
 
 
 class CustomTasks:
-    def __tip_section(self):
-        return "If you do your BEST WORK, I'll give you a $10,000 commission!"
-
+    """
+    自定义任务工厂类
+    ================
+    
+    使用工厂模式创建和管理所有任务。
+    每个方法返回一个配置好的 Task 实例。
+    
+    任务与代理的关系：
+    - 一个任务必须绑定一个代理（agent 参数）
+    - 一个代理可以执行多个任务
+    - 任务之间可以通过 context 形成依赖链
+    
+    扩展方式：
+    如需添加新任务，只需在此类中新增方法即可。
+    """
+    
     def task_1_name(self, agent, var1, var2):
-        return Task(
-            description=dedent(
-                f"""
-            Do something as part of task 1
-            
-            {self.__tip_section()}
-    
-            Make sure to use the most recent data as possible.
-    
-            Use this variable: {var1}
-            And also this variable: {var2}
         """
-            ),
-            expected_output="The expected output of the task",
+        创建第一个任务
+        
+        这是研究/信息收集类型任务的模板。
+        
+        参数:
+            agent: 执行此任务的代理实例（来自 agents.py）
+            var1:  用户传入的第一个变量（如搜索关键词）
+            var2:  用户传入的第二个变量（如额外约束条件）
+            
+        返回:
+            Task: 配置好的 CrewAI 任务实例
+            
+        任务描述编写技巧：
+        - 使用 {变量} 引用外部参数
+        - 清晰说明输入和输出要求
+        - 描述要足够详细，让代理理解具体需求
+        """
+        return Task(
+            # === 任务描述 ===
+            # 这是代理看到的核心指令，越详细越好
+            description="""
+                在这里定义你的任务1描述。确保包含所有相关信息。
+                
+                你可以使用以下变量:
+                - 变量1: {var}
+                - 变量2: {var2}
+                
+                请根据这些信息完成任务。
+            """.format(var=var1, var2=var2),
+            
+            # === 预期输出 ===
+            # 明确告知代理应该输出什么格式的内容
+            # 这有助于获得结构化的、符合预期的结果
+            expected_output="在这里定义你期望的任务1最终输出。",
+            
+            # === 执行此任务的代理 ===
             agent=agent,
         )
 
     def task_2_name(self, agent):
-        return Task(
-            description=dedent(
-                f"""
-            Take the input from task 1 and do something with it.
-                                       
-            {self.__tip_section()}
-
-            Make sure to do something else.
         """
-            ),
-            expected_output="The expected output of the task",
+        创建第二个任务
+        
+        这是一个分析/总结类型任务的模板。
+        与 task_1 不同，这个任务不接收用户变量，
+        通常用于处理前一个任务的输出或做总结性工作。
+        
+        参数:
+            agent: 执行此任务的代理实例
+            
+        返回:
+            Task: 配置好的 CrewAI 任务实例
+        """
+        return Task(
+            description="""在这里定义你的任务2描述。""",
+
+            expected_output="在这里定义你期望的任务2最终输出。",
+            
+            # 指定执行此任务的代理
             agent=agent,
+            
+            # === 任务上下文（依赖关系）===
+            # 如果此任务依赖于其他任务的输出，可以在这里声明
+            # 例如：context=[task_1]，表示此任务会收到 task_1 的输出作为参考
+            # 这样就形成了任务流水线：task_1 输出 → task_2 使用
+            #
+            # 用法示例：
+            # context=[previous_task],  # 前一个任务的输出会自动传入
         )

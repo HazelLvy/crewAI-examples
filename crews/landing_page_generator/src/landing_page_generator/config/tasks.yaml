@@ -1,179 +1,254 @@
-expand_idea_task:
+# ============================================================
+#  落地页生成器 - 任务定义配置 (Tasks Configuration)
+# ============================================================
+#
+# 本文件定义了落地页生成系统中的 7 个任务。
+# 每个任务通过 description（描述）、expected_output（预期输出）
+# 来告诉代理具体要做什么、产出什么。
+#
+# 任务依赖关系（通过 context 实现）：
+#   Task1(想法分析) → Task2(模板选择) → Task3(内容规划)
+#     → Task4(文案撰写) → Task5(首屏修改) → Task6(特征区修改)
+#       → Task7(最终审查)
+#
+# 变量说明：
+#   {idea}          - 用户的原始创意想法（在 crew.py 中注入）
+#   {template_path} - 模板文件路径（动态替换）
+# ============================================================
+
+idea_analysis:  # =============== 任务1：想法分析与扩展 ===============
+  # 任务描述 —— 告诉代理要做什么
+  # 越详细越好，代理会根据描述来决定行动方案
   description: >
-    """
-      THIS IS A GREAT IDEA! Analyze and expand it 
-      by conducting a comprehensive research.
-  
-      Final answer MUST be a comprehensive idea report 
-      detailing why this is a great idea, the value 
-      proposition, unique selling points, why people should 
-      care about it and distinguishing features. 
-  
-       IDEA: 
-      ----------
-      {idea}
-    """
-  expected_output: >
-
-refine_idea_task:
-  description: >
-    """
-      Expand idea report with a Why, How, and What 
-      messaging strategy using the Golden Circle 
-      Communication technique, based on the idea report.
-      
-      Your final answer MUST be the updated complete 
-      comprehensive idea report with WHY, HOW, WHAT, 
-      a core message, key features and supporting arguments.
-      
-      YOU MUST RETURN THE COMPLETE IDEA REPORT AND 
-      THE DETAILS, You'll get a $100 tip if you do your best work!
-    """
-  expected_output: >
-
-choose_template_task:
-  description: >
-    """Learn the templates options choose and copy 
-        the one that suits the idea below the best, 
-        YOU MUST COPY, and then YOU MUST read the src/component 
-        in the directory you just copied, to decide what 
-        component files should be updated to make the 
-        landing page about the idea below.
-        
-        - YOU MUST READ THE DIRECTORY BEFORE CHOOSING THE FILES.      
-        - YOU MUST NOT UPDATE any Pricing components.
-        - YOU MUST UPDATE ONLY the 4 most important components.
-        
-        Your final answer MUST be ONLY a JSON array of 
-        components full file paths that need to be updated.
-
-        IDEA 
-        ----------
-        {idea}
-      """
-  expected_output: >
-
-update_page_task:
-  description: >
-    """
-      READ the ./[chosen_template]/src/app/page.jsx OR
-      ./[chosen_template]/src/app/(main)/page.jsx (main with the parenthesis) 
-      to learn its content and then write an updated 
-      version to the filesystem that removes any 
-      section related components that are not in our 
-      list from the returns. Keep the imports.
-      
-      Final answer MUST BE ONLY a valid json list with 
-      the full path of each of the components we will be 
-      using, the same way you got them.
-
-      RULES
-      -----
-      - NEVER ADD A FINAL DOT to the file content.
-      - NEVER WRITE \\n (newlines as string) on the file, just the code.
-      - NEVER FORGET TO CLOSE THE FINAL BRACKET (}}) in the file.
-      - NEVER USE COMPONENTS THAT ARE NOT IMPORTED.
-      - ALL COMPONENTS USED SHOULD BE IMPORTED, don't make up components.
-      - Save the file as with `.jsx` extension.
-      - Return the same valid JSON list of the components your got.
-
-      You'll get a $100 tip if you follow all the rules!
-
-      Also update any necessary text to reflect this landing page
-      is about the idea below.
-      
-      IDEA 
-      ----------
-      {idea}
-    """
-  expected_output: >
-
-component_content_task:
-    description: >
-      """
-      A engineer will update the {component} (code below),
-      return a list of good options of texts to replace 
-      EACH INDIVIDUAL existing text on the component, 
-      the suggestion MUST be based on the idea below, 
-      and also MUST be similar in length with the original 
-      text, we need to replace ALL TEXT.
-      
-      NEVER USE Apostrophes for contraction! You'll get a $100 
-      tip if you do your best work!
-
-      IDEA 
-      -----
-      {expanded_idea}
-  
-      REACT COMPONENT CONTENT
-      -----
-      {file_content}
-      """
-    expected_output: >
-      
-
-update_component_task:
-  description: >
-    """
-      YOU MUST USE the tool to write an updated 
-      version of the react component to the file 
-      system in the following path: {component} 
-      replacing the text content with the suggestions 
-      provided.
-      
-      You only modify the text content, you don't add 
-      or remove any components.
-
-      RULES
-      -----
-      - Remove all the links, this should be single page landing page.
-      - Don't make up images, videos, gifs, icons, logos, etc.
-      - keep the same style and tailwind classes.
-      - MUST HAVE `'use client'` at the be beginning of the code.
-      - href in buttons, links, NavLinks, and navigations should be `#`.
-      - NEVER WRITE \\n (newlines as string) on the file, just the code.
-      - NEVER FORGET TO CLOSE THE FINAL BRACKET (}}) in the file.
-      - Keep the same component imports and don't use new components.
-      - NEVER USE COMPONENTS THAT ARE NOT IMPORTED.
-      - ALL COMPONENTS USED SHOULD BE IMPORTED, don't make up components.
-      - Save the file as with `.jsx` extension.
-
-      If you follow the rules I'll give you a $100 tip!!! 
-      MY LIFE DEPEND ON YOU FOLLOWING IT!
-  
-      CONTENT TO BE UPDATED
-      -----
-      {file_content}
-    """
-  expected_output: >
-    """You first write the file then your final answer 
-      MUST be the updated component content."""
-
-qa_component_task:
-  description: >
-   """
-   Check the React component code to make sure 
-      it's valid and abide by the rules below, 
-      if it doesn't then write the correct version to 
-      the file system using the write file tool into 
-      the following path: {component}.
+    对给定的产品创意想法进行深入分析，并将其转化为全面的产品概念。
     
-      Your final answer should be a confirmation that 
-      the component is valid and abides by the rules and if
-      you had to write an updated version to the file system.
-
-      RULES
-      -----
-      - NEVER USE Apostrophes for contraction!
-      - ALL COMPONENTS USED SHOULD BE IMPORTED.
-      - MUST HAVE `'use client'` at the be beginning of the code.
-      - href in buttons, links, NavLinks, and navigations should be `#`.
-      - NEVER WRITE \\n (newlines as string) on the file, just the code.
-      - NEVER FORGET TO CLOSE THE FINAL BRACKET (}}) in the file.
-      - NEVER USE COMPONENTS THAT ARE NOT IMPORTED.
-      - ALL COMPONENTS USED SHOULD BE IMPORTED, don't make up components.
-      - Always use `export function` for the component class.
-
-      You'll get a $100 tip if you follow all the rules!
-    """
+    你的分析应包括以下方面：
+    
+    **1. 产品概述和核心价值主张**
+    - 这个产品的核心功能是什么？
+    - 它解决了什么问题？
+    - 它的独特卖点 (USP) 是什么？
+    
+    **2. 目标受众分析**
+    - 谁是理想用户？（人口统计特征）
+    - 他们的痛点和需求是什么？
+    - 他们目前在用什么解决方案？
+    
+    **3. 市场定位**
+    - 主要竞争对手是谁？
+    - 我们如何差异化？
+    - 品牌个性应该是什么样的？
+    
+    **4. 关键功能和优势**
+    - 列出最重要的 5-8 个产品特性
+    - 为每个特性编写简短但有吸引力的描述
+    
+    **5. 落地页内容策略**
+    - 主要标题方向建议
+    - 需要突出的关键信息
+    - 推荐的行动号召 (CTA)
+    
+    请使用搜索工具研究类似产品和市场趋势。
+    将完整的产品概念文档保存到 ./workdir/product-concept.md 文件中。
+  
+  # 预期输出 —— 定义代理应该产出什么格式的结果
   expected_output: >
+    一份全面的产品概念文档 (product-concept.md)，
+    包含详细的产品描述、目标受众分析、市场定位策略、
+    关键功能列表以及落地页内容策略建议。
+
+template_selection:  # =============== 任务2：模板选择 ===============
+  description: >
+    根据上一任务的产品概念分析，为落地页项目选择最合适的模板。
+    
+    可用模板列表：
+    {templates}
+    
+    选择标准：
+    1. **行业匹配度**：模板的设计风格是否适合该产品领域
+    2. **布局适配性**：模板的页面结构是否能有效展示产品信息
+    3. **目标受众契合**：视觉风格是否与目标用户群体匹配
+    4. **功能性需求**：模板是否支持所需的内容类型展示
+    
+    分析每个候选模板的优缺点，并给出最终推荐。
+    将你的选择结果保存到 ./workdir/template-selection.md 文件中。
+  
+  expected_output: >
+    一份模板选择报告 (template-selection.md)，
+    包含选定的模板名称、选择理由、
+    以及该模板将如何适配产品概念的说明。
+
+content_planning:  # =============== 任务3：页面内容规划 ===============
+  description: >
+    根据产品概念和选定的模板结构，制定详细的落地页内容规划。
+    
+    你需要规划以下页面部分的内容：
+    
+    **1. Hero Section（首屏区域）**
+    - 主标题（Hook）
+    - 副标题 / 价值主张描述
+    - 主 CTA 按钮（Primary Call-to-Action）
+    - 背景/配图建议
+    
+    **2. Features/Benefits Section（特色功能区）**
+    - 每个核心特性的标题和描述文字
+    - 图标或图片建议
+    - 排列顺序（按重要性排序）
+    
+    **3. Social Proof Section（社会证明区）**
+    - 客户评价/推荐语
+    - 数据指标展示（用户数、满意度等）
+    
+    **4. Pricing Section（定价区域）** （如适用）
+    - 定价方案描述
+    
+    **5. Final CTA Section（最终行动号召）**
+    - 结尾的行动引导文案
+    
+    确保内容规划与模板的实际结构相匹配。
+    先读取选定模板的文件，了解其 HTML 结构，
+    再据此制定内容规划。
+    将完整的 content plan 保存到 ./workdir/content-plan.md 中。
+  
+  expected_output: >
+    一份详尽的落地页内容规划文档 (content-plan.md)，
+    明确规定每个部分应包含的具体文案内容和设计要求。
+
+copywriting:  # =============== 任务4：文案撰写 ===============
+  description: >
+    根据内容规划，撰写落地页各部分的实际营销文案。
+    
+    写作要求：
+    1. **主标题 (Hero Headline)**：
+       - 简洁有力，一眼抓住注意力
+       - 直接点明核心价值
+       - 控制在 10 个词以内最佳
+    
+    2. **副标题 (Subheadline)**：
+       - 补充说明主标题
+       - 可以稍微展开价值主张
+       
+    3. **特性描述 (Feature Descriptions)**：
+       - 每条特性一段话（2-3 句话）
+       - 以用户利益为中心，而非功能列表
+       - 使用主动动词和具象化语言
+       
+    4. **行动号召 (CTA)**：
+       - 清晰明确，告知用户下一步做什么
+       - 使用动词开头（如"立即开始"、"免费试用"、"了解更多"）
+       
+    5. **整体语气**：
+       - 与品牌个性一致
+       - 专业但亲切
+       - 具有说服力但不夸张
+    
+    请先阅读 product-concept.md 和 content-plan.md 作为参考，
+    然后撰写所有文案。
+    将完成的文案保存到 ./workdir/copywriting.md 文件中。
+  
+  expected_output: >
+    完整的落地页文案集合 (copywriting.md)，
+    包括所有页面的标题、副标题、描述文字、
+    行动号召按钮文本等所有文本内容。
+
+hero_section_modification:  # =============== 任务5：首屏代码修改 ===============
+  # ⭐ 这是第一个直接修改代码的任务！
+  description: >
+    现在，你需要修改落地页的首屏（Hero Section）HTML/CSS 文件，
+    使其与我们撰写的文案和产品设计相匹配。
+    
+    工作步骤：
+    
+    1. **读取当前文件**：
+       - 找到模板的主 HTML 文件（通常是 index.html）
+       - 仔细查看 Hero Section 的当前结构和类名
+       
+    2. **理解 Tailwind CSS 类名**：
+       - 保留原有的响应式布局类（如 sm:, md:, lg: 断点）
+       - 保持原有的间距、排版系统
+       - 只替换内容相关的部分
+       
+    3. **修改内容**：
+       - 替换主标题文本 (<h1>)
+       - 替换副标题文本 (<p> 或 <h2>)
+       - 更新 CTA 按钮文字
+       - 如需要，调整颜色变量以匹配品牌色
+       
+    4. **保持完整性**：
+       - 不要破坏现有的 JavaScript 功能
+       - 保持响应式设计的正常工作
+       - 确保 HTML 结构正确闭合
+    
+    请参考 copywriting.md 中的实际文案来修改代码。
+  
+  expected_output: >
+    已修改完成的首屏 HTML/CSS 代码，
+    文案已正确嵌入，视觉效果符合产品品牌形象。
+
+features_section_modification:  # =============== 任务6：特征区代码修改 ===============
+  description: >
+    继续修改落地页的特征/功能展示区域（Features Section）。
+    
+    工作步骤：
+    
+    1. **找到 Features 区域**：
+       - 在 HTML 中定位到 features 或 benefits 相关的部分
+       - 了解当前的卡片/列表结构
+       
+    2. **更新特性列表**：
+       - 根据 product concept 中的关键特性数量进行调整
+       - 替换每个特性的标题和描述文字
+       - 如果特性数量不匹配，需要增删对应的 HTML 元素
+       
+    3. **优化展示效果**：
+       - 确保图标/插图与特性内容相关
+       - 调整文字长度以保持视觉平衡
+       - 检查移动端显示效果
+       
+    4. **保持一致性**：
+       - 与首屏区域的视觉风格保持一致
+       - 使用相同的配色方案和字体层级
+       - 确保整体流畅自然
+    
+    同样请参考 copywriting.md 中的文案内容。
+  
+  expected_output: >
+    已修改完成的特征展示区域代码，
+    所有产品特性和描述已正确呈现。
+
+final_review:  # =============== 任务7：最终审查与完善 ===============
+  description: >
+    进行最终的全面审查，确保落地页的所有部分协调统一。
+    
+    审查清单：
+    
+    ✅ **内容审查**
+      - [ ] 所有拼写和语法正确
+      - [ ] 文案语气前后一致
+      - [ ] 价值主张清晰传达
+      - [ ] CTA 明确且有吸引力
+      
+    ✅ **技术审查**
+      - [ ] HTML 结构完整无误
+      - [ ] 所有标签正确闭合
+      - [ ] CSS 类名使用正确
+      - [ ] 无残留的占位符文字
+      
+    ✅ **设计一致性**
+      - [ ] 各区域视觉风格统一
+      - [ ] 字体大小层级合理
+      - [ ] 间距节奏感良好
+      - [ ] 配色方案和谐
+      
+    ✅ **用户体验**
+      - [ ] 信息层次清晰
+      - [ ] 引导路径顺畅（从头到 CTA）
+      - [ ] 移动端友好
+      - [ ] 加载性能考虑
+    
+    如发现任何问题，请立即修复。这是最后的机会
+    确保交付一个高质量的落地页。
+  
+  expected_output: >
+    经过最终审查和完善后的完整落地页项目，
+    所有文件均已就绪，可直接部署使用。

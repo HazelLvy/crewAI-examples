@@ -1,1 +1,34 @@
-https://tailwindui.com/templates
+/*
+ * ============================================
+ *  模板放置目录 (Templates Directory)
+ * ============================================
+ *
+ * 本目录用于存放 Tailwind UI 模板文件夹。
+ *
+ * 获取方式：
+ *   1. 访问 https://tailwindui.com/templates
+ *   2. 购买许可证（一次性付费，终身使用）
+ *   3. 下载你需要的单独模板（Individual Templates）
+ *   4. 将解压后的模板文件夹放入此目录
+ *
+ * 目录结构示例：
+ *   templates/
+ *   ├── saas-landing-page/        ← 一个完整的模板文件夹
+ *   │   ├── index.html
+ *   │   ├── css/
+ *   │   └── js/
+ *   ├── portfolio-template/       ← 可以放多个模板
+ *   └── ...
+ *
+ * 注意事项：
+ *   - 每个模板应该是一个独立的文件夹
+ *   - 文件夹名称可以自定义
+ *   - 需要在 config/templates.json 中注册模板信息
+ *   - 未放入模板时运行程序会报错并退出
+ *
+ * 免费替代方案：
+ *   如果不想购买 Tailwind UI，也可以使用其他免费模板：
+ *   - https://html5up.net/ (免费 HTML 模板)
+ *   - https://bootstrapmade.com/ (Bootstrap 模板)
+ *   - 但需要修改 tasks.py 中的提示词以适配新模板
+ */

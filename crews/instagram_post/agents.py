@@ -1,117 +1,224 @@
-import os
-from textwrap import dedent
+"""
+Instagram 营销代理定义 (Agents)
+================================
+本文件定义了 Instagram 帖子生成系统中使用的 5 个 AI 代理。
+
+代理分工：
+┌─────────────────────────────────────────────────────┐
+│              文案团队 (Copy Crew)                     │
+│  ┌───────────────────┐ ┌──────────────┐ ┌─────────┐ │
+│  │ product_competitor│ │strategy_     │ │creative │ │
+│  │ _agent            │ │planner_agent │ |_agent   │ │
+│  │ 产品/竞品分析师    │ │ 策划规划师   │ │创意文案 │ │
+│  └───────────────────┘ └──────────────┘ └─────────┘ │
+├─────────────────────────────────────────────────────┤
+│              图片团队 (Image Crew)                    │
+│  ┌───────────────────┐ ┌──────────────────────────┐  │
+│  │ senior_photographer│ │chief_creative_diretor    │  │
+│  │ _agent             │ |_agent                    │  │
+│  │ 高级摄影师         │ │首席创意总监               │  │
+│  └───────────────────┘ └──────────────────────────┘  │
+└─────────────────────────────────────────────────────┘
+"""
+
 from crewai import Agent
+
+# 导入自定义工具类（在 tools/ 目录中定义）
 from tools.browser_tools import BrowserTools
 from tools.search_tools import SearchTools
-from langchain.agents import load_tools
+from tools.calculator_tools import CalculatorTools
+from tools.sec_tools import SECTools
 
-from langchain.llms import Ollama
 
 class MarketingAnalysisAgents:
-	def __init__(self):
-		self.llm = Ollama(model=os.environ['MODEL'])
+    """
+    营销分析代理工厂类
+    ==================
+    
+    创建 5 个专业代理，分为两个团队：
+    - 文案团队：负责产品研究、策略制定、文案创作
+    - 图片团队：负责视觉创意构思和审核
+    
+    每个代理都有独特的角色定位、专业技能和工具配置。
+    """
 
-	def product_competitor_agent(self):
-		return Agent(
-			role="Lead Market Analyst",
-			goal=dedent("""\
-				Conduct amazing analysis of the products and
-				competitors, providing in-depth insights to guide
-				marketing strategies."""),
-			backstory=dedent("""\
-				As the Lead Market Analyst at a premier
-				digital marketing firm, you specialize in dissecting
-				online business landscapes."""),
-			tools=[
-					BrowserTools.scrape_and_summarize_website,
-					SearchTools.search_internet
-			],
-			allow_delegation=False,
-			llm=self.llm,
-			verbose=True
-		)
+    # ================================================================
+    #                  文案团队代理 (Copy Crew Agents)
+    # ================================================================
 
-	def strategy_planner_agent(self):
-		return Agent(
-			role="Chief Marketing Strategist",
-			goal=dedent("""\
-				Synthesize amazing insights from product analysis
-				to formulate incredible marketing strategies."""),
-			backstory=dedent("""\
-				You are the Chief Marketing Strategist at
-				a leading digital marketing agency, known for crafting
-				bespoke strategies that drive success."""),
-			tools=[
-					BrowserTools.scrape_and_summarize_website,
-					SearchTools.search_internet,
-					SearchTools.search_instagram
-			],
-			llm=self.llm,
-			verbose=True
-		)
+    def product_competitor_agent(self):
+        """
+        产品与竞品分析师代理
+        
+        职责：
+        - 分析产品网站，提取核心特性
+        - 研究目标用户群体和市场需求
+        - 调查竞争对手的营销策略
+        - 收集行业趋势和市场数据
+        
+        可用工具：
+        - 浏览器工具：抓取和分析网页内容
+        - 搜索工具：搜索竞品信息
+        - 计算器工具：处理数据计算
+        - SEC 工具：查询上市公司财务数据（如适用）
+        
+        返回:
+            Agent: 配置好的产品/竞品分析代理
+        """
+        return Agent(
+            role="高级市场研究分析师",
+            goal="""深入研究给定的 {product_website} URL 和提供的任何额外信息，
+                全面了解产品和公司。分析目标受众、市场定位、独特卖点以及
+                当前营销策略。同时识别主要竞争对手并分析其优势/劣势。""",
 
-	def creative_content_creator_agent(self):
-		return Agent(
-			role="Creative Content Creator",
-			goal=dedent("""\
-				Develop compelling and innovative content
-				for social media campaigns, with a focus on creating
-				high-impact Instagram ad copies."""),
-			backstory=dedent("""\
-				As a Creative Content Creator at a top-tier
-				digital marketing agency, you excel in crafting narratives
-				that resonate with audiences on social media.
-				Your expertise lies in turning marketing strategies
-				into engaging stories and visual content that capture
-				attention and inspire action."""),
-			tools=[
-					BrowserTools.scrape_and_summarize_website,
-					SearchTools.search_internet,
-					SearchTools.search_instagram
-			],
-			llm=self.llm,
-			verbose=True
-		)
+            backstory="""你是一位在数字营销领域拥有丰富经验的高级市场研究分析师。
+                你擅长深入挖掘产品网站，提取关键洞察，并提供可操作的情报，
+                为有效的营销策略提供依据。
+                你对数据驱动决策充满热情，总是寻求全面了解市场格局。""",
 
-	def senior_photographer_agent(self):
-		return Agent(
-				role="Senior Photographer",
-				goal=dedent("""\
-					Take the most amazing photographs for instagram ads that
-					capture emotions and convey a compelling message."""),
-				backstory=dedent("""\
-					As a Senior Photographer at a leading digital marketing
-					agency, you are an expert at taking amazing photographs that
-					inspire and engage, you're now working on a new campaign for a super
-					important customer and you need to take the most amazing photograph."""),
-				tools=[
-					BrowserTools.scrape_and_summarize_website,
-					SearchTools.search_internet,
-					SearchTools.search_instagram
-				],
-				llm=self.llm,
-				allow_delegation=False,
-				verbose=True
-		)
+            # 该代理需要大量工具来收集信息
+            tools=[
+                BrowserTools.scrape_and_summarize_website,  # 抓取网页内容
+                SearchTools.search_internet,                 # 互联网搜索
+                CalculatorTools.calculate,                   # 数据计算
+                SECTools.search_10K,                         # 查询 SEC 10-K 报告
+                SECTools.search_10Q,                         # 查询 SEC 10-Q 报告
+            ],
+            verbose=True,
+        )
 
-	def chief_creative_diretor_agent(self):
-		return Agent(
-				role="Chief Creative Director",
-				goal=dedent("""\
-					Oversee the work done by your team to make sure it's the best
-					possible and aligned with the product's goals, review, approve,
-					ask clarifying question or delegate follow up work if necessary to make
-					decisions"""),
-				backstory=dedent("""\
-					You're the Chief Content Officer of leading digital
-					marketing specialized in product branding. You're working on a new
-					customer, trying to make sure your team is crafting the best possible
-					content for the customer."""),
-				tools=[
-					BrowserTools.scrape_and_summarize_website,
-					SearchTools.search_internet,
-					SearchTools.search_instagram
-				],
-				llm=self.llm,
-				verbose=True
-		)
+    def strategy_planner_agent(self):
+        """
+        营销策略规划师代理
+        
+        职责：
+        - 基于产品分析和竞品研究结果制定整体营销策略
+        - 确定 Instagram 营销活动的方向和重点
+        - 规划内容策略和发布节奏
+        - 定义关键绩效指标 (KPIs)
+        
+        可用工具：
+        - 搜索工具：补充调研最新营销趋势
+        - 计算器工具：预算分配和 ROI 计算
+        
+        返回:
+            Agent: 配置好的策略规划代理
+        """
+        return Agent(
+            role="首席营销策略规划师",
+            goal="""基于产品分析和竞争研究结果，制定全面的 Instagram 营销策略。
+                策划能够吸引目标受众的营销活动，并与品牌形象保持一致。""",
+
+            backstory="""你是一位备受推崇的首席营销策略规划师，
+                在为各种品牌制定成功的营销活动方面拥有卓越记录。
+                你擅长将市场洞察转化为创造性的、数据驱动的策略，
+                从而产生实际的业务成果。
+                你对 Instagram 营销有深刻的理解，并且总是紧跟最新趋势和最佳实践。""",
+
+            tools=[
+                SearchTools.search_internet,   # 搜索最新营销趋势
+                CalculatorTools.calculate,     # 预算和指标计算
+            ],
+            verbose=True,
+        )
+
+    def creative_content_creator_agent(self):
+        """
+        创意文案撰稿人代理
+        
+        职责：
+        - 根据营销策略撰写引人注目的 Instagram 广告文案
+        - 创作符合品牌调性的文字内容
+        - 使用适当的标签 (hashtags) 和表情符号
+        - 优化文案以提高互动率
+        
+        特点：
+        - 不使用额外搜索工具，专注于纯创作
+        - 输出可直接发布的 Instagram 文案
+        
+        返回:
+            Agent: 配置好的创意文案代理
+        """
+        return Agent(
+            role="顶级创意文案撰稿人",
+            goal="""基于营销策略，创作引人入胜且具有说服力的 Instagram 广告文案，
+                能够引起目标受众共鸣并推动参与度。""",
+
+            backstory="""你是一位屡获殊荣的创意文案撰稿人，
+                在制作令人难忘的广告文案方面拥有超过 10 年的经验。
+                你对文字的力量有着深刻的理解，知道如何精心设计能够激发行动的信息。
+                你的作品曾帮助众多品牌实现了显著的参与度和销售增长。""",
+
+            # 创意写作不需要外部工具，依靠自身知识即可完成
+            tools=[],
+            verbose=True,
+        )
+
+    # ================================================================
+    #                  图片团队代理 (Image Crew Agents)
+    # ================================================================
+
+    def senior_photographer_agent(self):
+        """
+        高级摄影师代理
+        
+        职责：
+        - 根据广告文案构思视觉画面
+        - 生成详细的 AI 绘图提示词（用于 Midjourney / DALL-E）
+        - 设计构图、光影、色彩方案等视觉元素
+        - 确保图片风格与品牌调性一致
+        
+        工作流程：
+        接收 ad_copy（文案）→ 分析文案的情感和主题 → 生成画面描述
+        
+        返回:
+            Agent: 配置好的高级摄影代理
+        """
+        return Agent(
+            role="高级摄影师",
+            goal="""根据提供的广告文案，拍摄一张令人惊叹的照片，
+                完美捕捉 Instagram 帖子的精髓。""",
+
+            backstory="""你是一位备受赞誉的高级摄影师，
+                在视觉叙事方面拥有超过 15 年的经验。
+                你拥有将普通场景转化为非凡画面的独特能力，
+                并且你对光线、构图和色彩的深刻理解使你创作的图像
+                能够讲述引人入胜的故事并唤起强烈的情感。""",
+
+            # 摄影师不需要外部工具，靠专业知识和创意完成任务
+            tools=[],
+            verbose=True,
+        )
+
+    def chief_creative_diretor_agent(self):
+        """
+        首席创意总监代理
+        
+        职责：
+        - 审核摄影师生成的图片描述/提示词
+        - 从艺术性和品牌一致性角度进行评估
+        - 提供优化建议，确保最终输出质量
+        - 作为质量控制环节，确保图片符合营销目标
+        
+        与摄影师的关系：
+        - 是摄影师的"上级"审核者
+        - 确保创意产出达到专业标准
+        
+        返回:
+            Agent: 配置好的首席创意总监代理
+        """
+        return Agent(
+            role="首席创意总监",
+            goal="""审查摄影师拍摄的图片，确保它符合最高标准的艺术性，
+                并完美契合 Instagram 帖子的预期概念。""",
+
+            backstory="""你是一位富有远见的首席创意总监，
+                在领导创意团队交付突破性工作方面拥有超过 20 年的经验。
+                你拥有无可挑剔的眼光，能识别优秀与卓越之间的细微差别，
+                并且你的指导帮助无数摄影师和设计师将技能推向新的高度。
+                你对细节的关注和对完美的执着追求是业界的传奇。""",
+
+            # 创意总监依靠审美判断力进行审核，无需外部工具
+            tools=[],
+            verbose=True,
+        )

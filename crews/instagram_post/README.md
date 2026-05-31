@@ -1,44 +1,44 @@
-# AI Crew for Instagram Post
-## Introduction
-This project is an example using the CrewAI framework to automate the process of coming up with an instagram post. CrewAI orchestrates autonomous AI agents, enabling them to collaborate and execute complex tasks efficiently.
+# AI 团队 - Instagram 帖子生成
+## 简介
+本项目是一个使用 CrewAI 框架的示例，用于自动化生成 Instagram 帖子的流程。CrewAI 编排自主 AI 代理，使它们能够协作并高效地执行复杂任务。
 
-#### Instagram Post
-[![Instagram Post](https://img.youtube.com/vi/lcD0nT8IVTg/0.jpg)](https://www.youtube.com/watch?v=lcD0nT8IVTg "Instagram Post")
+#### Instagram 帖子
+[![Instagram 帖子](https://img.youtube.com/vi/lcD0nT8IVTg/0.jpg)](https://www.youtube.com/watch?v=lcD0nT8IVTg "Instagram 帖子")
 
-By [@joaomdmoura](https://x.com/joaomdmoura)
+由 [@joaomdmoura](https://x.com/joaomdmoura) 创作
 
-- [CrewAI Framework](#crewai-framework)
-- [Running the script](#running-the-script)
-- [Details & Explanation](#details--explanation)
-- [Using Local Models with Ollama](#using-local-models-with-ollama)
-- [License](#license)
+- [CrewAI 框架](#crewai-框架)
+- [运行脚本](#运行脚本)
+- [详细说明](#详细说明)
+- [使用 Ollama 本地模型](#使用-ollama-本地模型)
+- [许可证](#许可证)
 
-## CrewAI Framework
-CrewAI is designed to facilitate the collaboration of role-playing AI agents. In this example, these agents work together to generate a creative and trendy instagram post.
+## CrewAI 框架
+CrewAI 旨在促进角色扮演 AI 代理之间的协作。在本示例中，这些代理协同工作以生成富有创意且流行的 Instagram 帖子。
 
-## Running the Script
-This example uses OpenHermes 2.5 through Ollama by default so you should to download [Ollama](ollama.ai) and [OpenHermes](https://ollama.ai/library/openhermes).
+## 运行脚本
+本示例默认通过 Ollama 使用 OpenHermes 2.5，因此你需要下载 [Ollama](ollama.ai) 和 [OpenHermes](https://ollama.ai/library/openhermes)。
 
-You can change the model by changing the `MODEL` env var in the `.env` file.
+你可以通过修改 `.env` 文件中的 `MODEL` 环境变量来更改模型。
 
-- **Configure Environment**: Copy ``.env.example` and set up the environment variables for [Browseless](https://www.browserless.io/), [Serper](https://serper.dev/).
-- **Install Dependencies**: Run `poetry install --no-root` (uses crewAI==0.130.0).
-- **Execute the Script**: Run `python main.py` and input your idea.
+- **配置环境**：复制 `.env.example` 并设置 [Browseless](https://www.browserless.io/)、[Serper](https://serper.dev/) 的环境变量。
+- **安装依赖**：运行 `poetry install --no-root`（使用 crewAI==0.130.0）。
+- **执行脚本**：运行 `python main.py` 并输入你的创意想法。
 
-## Details & Explanation
-- **Running the Script**: Execute `python main.py`` and input your idea when prompted. The script will leverage the CrewAI framework to process the idea and generate an instagram post.
-- **Key Components**:
-  - `./main.py`: Main script file.
-  - `./tasks.py`: Main file with the tasks prompts.
-  - `./agents.py`: Main file with the agents creation.
-  - `./tools/`: Contains tool classes used by the agents.
+## 详细说明
+- **运行脚本**：执行 `python main.py` 并在提示时输入你的创意想法。该脚本将利用 CrewAI 框架处理想法并生成 Instagram 帖子。
+- **关键组件**：
+  - `./main.py`: 主脚本文件。
+  - `./tasks.py`: 包含任务提示的主文件。
+  - `./agents.py`: 包含代理创建的主文件。
+  - `./tools/`: 包含代理使用的工具类。
 
-## Using Local Models with Ollama
-This example run entirely local models, the CrewAI framework supports integration with both closed and local models, by using tools such as Ollama, for enhanced flexibility and customization. This allows you to utilize your own models, which can be particularly useful for specialized tasks or data privacy concerns.
+## 使用 Ollama 本地模型
+本示例完全使用本地模型运行。CrewAI 框架支持与闭源模型和本地模型的集成，通过使用 Ollama 等工具，提供增强的灵活性和定制能力。这允许你使用自己的模型，对于专业任务或数据隐私问题特别有用。
 
-### Setting Up Ollama
-- **Install Ollama**: Ensure that Ollama is properly installed in your environment. Follow the installation guide provided by Ollama for detailed instructions.
-- **Configure Ollama**: Set up Ollama to work with your local model. You will probably need to [tweak the model using a Modelfile](https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md), I'd recommend playing with `top_p` and `temperature`.
+### 设置 Ollama
+- **安装 Ollama**：确保在你的环境中正确安装了 Ollama。请遵循 Ollama 提供的安装指南获取详细说明。
+- **配置 Ollama**：设置 Ollama 以配合本地模型工作。你可能需要[使用 Modelfile 调整模型](https://github.com/jmorganca/ollama/blob/main/docs/modelfile.md)，我建议尝试调整 `top_p` 和 `temperature` 参数。
 
-## License
-This project is released under the MIT License.
+## 许可证
+本项目基于 MIT 许可证发布。

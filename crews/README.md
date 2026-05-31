@@ -1,86 +1,87 @@
-# CrewAI Standard Crews Examples
+# CrewAI 标准团队示例 (Standard Crews Examples)
 
-This directory contains examples of traditional CrewAI implementations - autonomous agent teams working together to accomplish complex tasks.
+本目录包含传统 CrewAI 实现的示例——**自主 AI 代理团队协作完成复杂任务**。
 
-## What are CrewAI Crews?
+## 什么是 CrewAI 团队（Crew）？
 
-A CrewAI Crew is a team of AI agents, each with specific roles and goals, working together to complete tasks. Key components include:
-- **Agents**: Autonomous AI entities with specific roles and expertise
-- **Tasks**: Defined objectives that agents work to complete
-- **Tools**: Functions and integrations agents can use
-- **Process**: Sequential or hierarchical task execution
+CrewAI 团队是由多个 AI 代理组成的团队，每个代理拥有特定的角色和目标，协同工作以完成任务。核心组件包括：
 
-## Examples in this Directory
+- **Agents（代理）**：具有特定角色和专业知识的自主 AI 实体
+- **Tasks（任务）**：代理需要完成的明确目标
+- **Tools（工具）**：代理可以使用的功能和集成
+- **Process（流程）**：顺序执行或层级化的任务执行模式
 
-### Content Creation
-- **game-builder-crew**: Multi-agent team that designs and builds Python games
-- **instagram_post**: Creates engaging Instagram content with research and creativity
-- **landing_page_generator**: Builds complete landing pages from concepts
-- **marketing_strategy**: Develops comprehensive marketing campaigns
-- **screenplay_writer**: Converts text into professional screenplay format
+## 本目录中的示例
 
-### Business & Productivity
-- **job-posting**: Analyzes companies and creates tailored job descriptions
-- **prep-for-a-meeting**: Researches participants and prepares meeting strategies
-- **recruitment**: Automates candidate sourcing and evaluation
-- **stock_analysis**: Performs comprehensive financial analysis with SEC data
+### 内容创作
+- **game-builder-crew**：设计和构建 Python 游戏的多代理团队
+- **instagram_post**：结合研究和创意，生成吸引人的 Instagram 内容
+- **landing_page_generator**：从概念出发构建完整的落地页
+- **marketing_strategy**：制定全面的营销活动方案
+- **screenplay_writer**：将文本转换为专业的剧本格式
 
-### Data & Matching
-- **match_profile_to_positions**: CV-to-job matching with vector search
-- **meta_quest_knowledge**: Q&A system using PDF documentation
+### 业务与效率
+- **job-posting**：分析公司信息并创建定制化的职位描述
+- **prep-for-a-meeting**：研究参会人员并准备会议策略
+- **recruitment**：自动化候选人搜寻和评估流程
+- **stock_analysis**：利用 SEC 数据进行全面金融分析
 
-### Travel & Planning
-- **surprise_trip**: Plans personalized surprise travel itineraries
-- **trip_planner**: Compares destinations and optimizes travel plans
+### 数据与匹配
+- **match_profile_to_positions**：使用向量搜索进行简历与岗位匹配
+- **meta_quest_knowledge**：基于 PDF 文档的问答系统
 
-### Template
-- **starter_template**: Basic template for creating new CrewAI projects
+### 旅行与规划
+- **surprise_trip**：规划个性化的惊喜旅行行程
+- **trip_planner**：比较目的地并优化旅行计划
 
-## Common Crew Patterns
+### 模板
+- **starter_template**：创建新 CrewAI 项目的基础模板
 
-### Agent Definition
+## 常见团队模式（Patterns）
+
+### 代理定义
 ```yaml
 # agents.yaml
 researcher:
-  role: "Senior Research Analyst"
-  goal: "Uncover cutting-edge developments"
-  backstory: "You're a seasoned researcher..."
+  role: "高级研究分析师"
+  goal: "发现前沿发展动态"
+  backstory: "你是一位经验丰富的研究员..."
 ```
 
-### Task Definition
+### 任务定义
 ```yaml
 # tasks.yaml
 research_task:
-  description: "Conduct comprehensive research on {topic}"
+  description: "对 {topic} 进行全面研究"
   agent: researcher
-  expected_output: "Detailed research report"
+  expected_output: "详细的研究报告"
 ```
 
-### Crew Assembly
+### 组建团队
 ```python
 from crewai import Crew, Agent, Task
 
 crew = Crew(
     agents=[researcher, writer],
     tasks=[research_task, writing_task],
-    process="sequential"  # or "hierarchical"
+    process="sequential"  # 或 "hierarchical"（层级模式）
 )
 ```
 
-## Key Features Demonstrated
+## 展示的关键特性
 
-1. **Multi-Agent Collaboration**: Examples show 2-7 agents working together
-2. **Tool Integration**: Web search, APIs, file manipulation, databases
-3. **Custom Tools**: Many examples implement specialized tools
-4. **YAML Configuration**: Standardized agent/task definitions
-5. **Various Domains**: From creative writing to financial analysis
+1. **多代理协作**：示例展示了 2-7 个代理协同工作
+2. **工具集成**：网页搜索、API 调用、文件操作、数据库访问
+3. **自定义工具**：许多示例实现了专用工具
+4. **YAML 配置**：标准化的代理/任务定义方式
+5. **多领域覆盖**：从创意写作到金融分析，涵盖多种场景
 
-## Getting Started
+## 快速开始
 
-1. Choose an example that matches your use case
-2. Navigate to its directory
-3. Follow the example-specific README
-4. Install dependencies (usually via `pip install -r requirements.txt` or `poetry install`)
-5. Run with `python main.py` or as specified
+1. 选择一个与你的需求相匹配的示例
+2. 进入对应的目录
+3. 阅读该示例的 README 说明文件
+4. 安装依赖（通常通过 `pip install -r requirements.txt` 或 `poetry install`）
+5. 运行 `python main.py` 或按说明执行
 
-Each example is self-contained with all necessary configurations and can be used as a starting point for your own crews.
+每个示例都是自包含的，包含所有必要的配置，可作为你创建自己的团队的起点。

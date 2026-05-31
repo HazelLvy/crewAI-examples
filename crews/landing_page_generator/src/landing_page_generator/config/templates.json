@@ -1,62 +1,121 @@
-[
-  {
-    "name": "Spotlight",
-    "theme": "Personal Website Template",
-    "folder": "tailwindui-spotlight/spotlight-js",
-    "description": "A personal website so nice you’ll actually be inspired to publish on it."
-  },
-  {
-    "name": "Protocol",
-    "theme": "API Reference Template",
-    "folder": "tailwindui-protocol/protocol-js",
-    "description": "Probably the nicest API documentation website you've ever seen."
-  },
-  {
-    "name": "Commit",
-    "theme": "Changelog Template",
-    "folder": "tailwindui-commit/commit-js",
-    "description": "Share your work in progress with this beautiful changelog template."
-  },
-  {
-    "name": "Primer",
-    "theme": "Info Product Template",
-    "folder": "tailwindui-primer/primer-js",
-    "description": "A stunning landing page for your first course or ebook."
-  },
-  {
-    "name": "Studio",
-    "theme": "Agency Template",
-    "folder": "tailwindui-studio/studio-js",
-    "description": "Showcase your work and find new clients with this sophisticated agency template."
-  },
-  {
-    "name": "Salient",
-    "theme": "Template for SaaS products",
-    "folder": "tailwindui-salient/salient-js",
-    "description": "A SaaS landing page to announce your next big product."
-  },
-  {
-    "name": "Transmit",
-    "theme": "Podcast Template",
-    "folder": "tailwindui-transmit/transmit-js",
-    "description": "A clean and professional podcast template fit for any show."
-  },
-  {
-    "name": "Pocket",
-    "theme": "App Marketing Template",
-    "folder": "tailwindui-pocket/pocket-js",
-    "description": "The perfect website template for your exciting new mobile app."
-  },
-  {
-    "name": "Syntax",
-    "theme": "Documentation Template",
-    "folder": "tailwindui-syntax/syntax-js",
-    "description": "Educate your users in style with this documentation template."
-  },
-  {
-    "name": "Keynote",
-    "theme": "Conference / Meetup Template",
-    "folder": "tailwindui-keynote/keynote-js",
-    "description": "Launch your next conference or meetups with a splash with this eye-catching template."
+"""
+模板引用表 (Templates JSON)
+============================
+本文件定义了所有可用的 Tailwind UI 模板及其元数据。
+
+数据结构：
+{
+  "模板名称": {
+    "path": "模板文件夹路径",
+    "description": "模板描述",
+    "sections": ["可编辑的区域列表"]
   }
-]
+}
+
+使用场景：
+- 模板选择师代理读取此文件来了解可用选项
+- 根据产品特性匹配合适的模板
+
+注意：
+- path 是相对于 ./templates/ 目录的
+- 需要在 templates/ 目录下放入实际的模板文件夹
+- 模板来自 https://tailwindui.com/（需购买许可证）
+"""
+
+{
+  "Medium Newsletter Template - Dark Mode": {
+    "path": "./templates/medium-newsletter-template-dark-mode",
+    "description": "A medium newsletter template with dark mode support, perfect for content-heavy landing pages that want a modern, sleek look.",
+    "sections": [
+      "Hero Section",
+      "Newsletter Signup Form",
+      "Content Preview Area",
+      "Footer"
+    ]
+  },
+  "SaaS Landing Page - Light Mode": {
+    "path": "./templates/saas-landing-page-light-mode", 
+    "description": "A clean and professional SaaS landing page template ideal for software products, featuring a hero section, features grid, testimonials, and pricing.",
+    "sections": [
+      "Hero Section",
+      "Logo Cloud / Social Proof",
+      "Features Grid (3 columns)",
+      "Testimonials Carousel",
+      "Pricing Table",
+      "CTA Section",
+      "Footer"
+    ]
+  },
+  "Portfolio Landing Page - Creative": {
+    "path": "./templates/portfolio-landing-page-creative",
+    "description": "A creative portfolio landing page template suitable for designers, agencies, or any visually-driven brand. Features bold typography and artistic layouts.",
+    "sections": [
+      "Full-screen Hero with Animation",
+      "About / Bio Section",
+      "Featured Work Gallery",
+      "Services Overview",
+      "Contact Form",
+      "Minimal Footer"
+    ]
+  },
+  "E-commerce Product Page - Minimalist": {
+    "path": "./templates/ecommerce-product-page-minimalist",
+    "description": "A minimalist e-commerce product page template focused on showcasing products with clean aesthetics and smooth user experience.",
+    "sections": [
+      "Product Hero (Image + Details)",
+      "Product Features / Specs",
+      "Related Products Grid",
+      "Customer Reviews",
+      "Add to Cart CTA"
+    ]
+  },
+  "Startup Launch Page - Bold": {
+    "path": "./templates/startup-launch-page-bold",
+    "description": "A bold and energetic startup launch page template designed for new products or companies making a strong first impression.",
+    "sections": [
+      "Bold Hero Statement",
+      "Waitlist / Early Access Form",
+      "Key Differentiators",
+      "Team / Founders Section",
+      "Social Media Links",
+      "Coming Soon Countdown"
+    ]
+  },
+  "Agency Services Page - Professional": {
+    "path": "./templates/agency-services-page-professional",
+    "description": "A professional services page template for agencies, consultancies, or B2B companies. Clean layout with focus on credibility and expertise.",
+    "sections": [
+      "Professional Hero",
+      "Services List with Icons",
+      "Case Studies / Portfolio Highlights",
+      "Team Members Grid",
+      "Client Logos",
+      "Contact & Inquiry Form"
+    ]
+  },
+  "App Download Page - Modern": {
+    "path": "./templates/app-download-page-modern",
+    "description": "A modern app download page template for mobile apps, featuring device mockups, feature highlights, and direct download links.",
+    "sections": [
+      "App Hero with Device Mockup",
+      "Feature Showcase (with animations)",
+      "App Screenshots Gallery",
+      "Download Buttons (App Store + Play Store)",
+      "FAQ Accordion",
+      "Footer with Links"
+    ]
+  },
+  "Event Landing Page - Vibrant": {
+    "path": "./templates/event-landing-page-vibrant",
+    "description": "A vibrant event landing page template for conferences, meetups, or online events. Eye-catching design with schedule and speaker info.",
+    "sections": [
+      "Event Hero with Date/Location",
+      "Key Speakers / Guests Grid",
+      "Event Schedule / Agenda",
+      "Ticket Pricing Tiers",
+      "Sponsors Section",
+      "Registration CTA",
+      "Venue Map / Online Access Info"
+    ]
+  }
+}
