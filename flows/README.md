@@ -1,98 +1,98 @@
-# CrewAI Flows Examples
+# CrewAI Flows 示例集
 
-This directory contains examples demonstrating the CrewAI Flows pattern - a powerful orchestration framework for managing complex, multi-crew workflows with state management.
+本目录包含展示 **CrewAI Flows 模式**的示例 —— 这是一个强大的编排框架，用于管理**复杂的多团队（multi-crew）工作流**，支持状态管理。
 
-## What are CrewAI Flows?
+## 什么是 CrewAI Flows？
 
-CrewAI Flows allow you to:
-- Orchestrate multiple crews in sequence or parallel
-- Manage state across different execution steps
-- Implement conditional logic and routing
-- Create human-in-the-loop workflows
-- Build complex automation pipelines
+CrewAI Flows 允许你：
+- **按顺序或并行**编排多个团队（Crew）
+- 在不同的执行步骤之间**管理和传递状态**
+- 实现**条件逻辑和动态路由**
+- 创建**人工在环（Human-in-the-Loop）**工作流
+- 构建复杂的**自动化流水线**
 
-## Examples in this Directory
+## 本目录中的示例
 
-### 1. Content Creator Flow
-Multi-crew content generation system that:
-- Routes requests to specialized crews (Blog, LinkedIn, Research)
-- Generates professional content across different formats
-- Uses advanced orchestration with dynamic routing
-- Demonstrates complex multi-agent workflows
+### 1. Content Creator Flow（内容创作流程）
+多团队内容生成系统，功能包括：
+- 将请求**路由分发**到专业团队（博客、LinkedIn、研究报告）
+- 跨不同格式生成**专业化内容**
+- 使用**动态路由**的高级编排能力
+- 展示复杂的多代理工作流
 
-### 2. Email Auto Responder Flow
-Automated email monitoring and response generation system that:
-- Monitors Gmail inbox at regular intervals
-- Filters and categorizes incoming emails
-- Generates appropriate draft responses
-- Maintains state of processed emails
+### 2. Email Auto Responder Flow（邮件自动回复流程）
+自动化邮件监控与回复生成系统，功能包括：
+- 定期**监控 Gmail 收件箱**
+- **过滤和分类** incoming 邮件
+- 生成适当的**草稿回复**
+- 维护已处理邮件的**状态记录**
 
-### 3. Lead Score Flow
-Lead qualification and outreach automation that:
-- Processes leads from CSV files
-- Scores and ranks leads based on criteria
-- Implements human review for top candidates
-- Generates personalized outreach emails
+### 3. Lead Score Flow（销售线索评分流程）
+销售线索资格评估和外联自动化，功能包括：
+- 从 **CSV 文件**处理销售线索
+- 基于标准对线索进行**评分和排名**
+- 对高分候选人实施**人工审核环节**
+- 生成**个性化的外联邮件**
 
-### 4. Meeting Assistant Flow
-Meeting productivity automation that:
-- Processes meeting transcripts and notes
-- Extracts action items and decisions
-- Creates tasks in Trello
-- Sends notifications via Slack
+### 4. Meeting Assistant Flow（会议助手流程）
+会议生产力自动化系统，功能包括：
+- 处理会议**转录文本和笔记**
+- **提取待办事项（Action Items）和决议**
+- 在 **Trello** 中自动创建任务卡片
+- 通过 **Slack** 发送通知
 
-### 5. Self Evaluation Loop Flow
-Iterative content improvement system that:
-- Generates content (e.g., social media posts)
-- Self-evaluates against criteria
-- Automatically refines based on feedback
-- Implements retry logic with limits
+### 5. Self Evaluation Loop Flow（自评循环流程）
+迭代式内容改进系统，功能包括：
+- 生成内容（如社交媒体帖子）
+- 对照标准进行**自我评估**
+- 根据反馈**自动优化改进**
+- 实现带**重试限制**的重试逻辑
 
-### 6. Write a Book with Flows
-Book creation automation that:
-- Generates book outlines
-- Writes chapters in parallel
-- Maintains consistency across sections
-- Compiles final manuscript
+### 6. Write a Book with Flows（使用 Flows 写书）
+书籍创作自动化系统，功能包括：
+- 生成**书籍大纲**
+- **并行撰写**各章节
+- 保持各章节之间的**一致性**
+- 汇编最终**完整手稿**
 
-## Common Flow Patterns
+## 常见的 Flow 模式
 
-### Sequential Execution
+### 顺序执行
 ```python
-# Execute crews one after another
+# 让团队一个接一个地执行
 flow = Flow()
 flow.add_crew(crew1)
 flow.add_crew(crew2)
 ```
 
-### Parallel Execution
+### 并行执行
 ```python
-# Execute multiple crews simultaneously
+# 同时执行多个团队
 await flow.run_parallel([crew1, crew2, crew3])
 ```
 
-### Conditional Routing
+### 条件路由
 ```python
-# Route based on previous results
+# 根据前面的结果决定后续路径
 @flow.router
 def route_based_on_result(state):
     if state.score > 0.8:
-        return "high_quality_path"
-    return "needs_improvement_path"
+        return "high_quality_path"     # 高质量 → 走高质量路径
+    return "needs_improvement_path"    # 不合格 → 走改进路径
 ```
 
-### Human-in-the-Loop
+### 人工在环（Human-in-the-Loop）
 ```python
-# Pause for human input
+# 暂停等待人类输入
 human_feedback = flow.wait_for_input("Review these results")
 ```
 
-## Getting Started
+## 快速开始
 
-Each example includes:
-- Complete working code
-- Configuration files
-- README with specific instructions
-- Required dependencies
+每个示例都包含：
+- 完整的可运行代码
+- 配置文件
+- 附带具体说明的 README 文件
+- 所需的依赖项
 
-Choose an example that matches your use case and follow its README for setup instructions.
+选择一个与你需求匹配的示例，然后按照其 README 中的说明进行设置即可。

@@ -1,47 +1,108 @@
-research_company_culture_task:
+# ============================================================
+#  职位发布生成器 - 任务定义配置 (Tasks Configuration)
+# ============================================================
+#
+# 本文件定义了职位描述生成系统中的 5 个任务。
+# 每个任务通过 description（描述）、expected_output（预期输出）
+# 来告诉代理具体要做什么、产出什么。
+#
+# 变量说明（在 main.py 的 inputs 中传入）：
+#   {company_domain}      — 公司域名 URL
+#   {company_description} — 公司详细描述
+#   {hiring_needs}        — 招聘需求描述
+#   {specific_benefits}   — 具体福利待遇
+#
+# 任务依赖关系（通过 YAML 中的 context 字段或顺序执行自动传递）：
+#   Task1(公司文化研究) + Task5(行业分析) → Task2(岗位要求)
+#     → Task3(起草JD) → Task4(审核编辑)
+# ============================================================
+
+research_company_culture_task:  # =============== 任务1：研究公司文化 ===============
+  # 任务描述 —— 告诉代理要做什么
+  # 使用 {company_domain} 和 {company_description} 变量获取输入数据
   description: >
     Analyze the provided company website and the hiring manager's company's domain {company_domain},
     description {company_description}. Focus on understanding the company's culture, values, and mission.
     Identify unique selling points and specific projects or achievements highlighted on the site.
     Compile a report summarizing these insights, specifically how they can be leveraged in a job posting
     to attract the right candidates.
+
+    # 中文释义：
+    # 分析提供的公司网站和招聘经理提供的公司域名、公司描述。
+    # 重点理解公司的文化、价值观和使命。
+    # 识别网站上突出的独特卖点和特定项目或成就。
+    # 编写报告总结这些见解，特别是如何在职位描述中利用它们来吸引合适的候选人。
+
+  # 预期输出 —— 定义代理应该产出什么格式的结果
   expected_output: >
     A comprehensive report detailing the company's culture, values, and mission, along with specific selling
     points relevant to the job role. Suggestions on incorporating these insights into the job posting should be included.
 
-research_role_requirements_task:
+    # 一份详尽的报告，详细说明公司的文化、价值观和使命，
+    # 以及与该职位相关的独特卖点。应包含如何将这些洞察融入 JD 的建议。
+
+research_role_requirements_task:  # =============== 任务2：研究岗位要求 ===============
   description: >
     Based on the hiring manager's needs: {hiring_needs}, identify the key skills, experiences,
     and qualities the ideal candidate should possess for the role. Consider the company's current projects,
     its competitive landscape, and industry trends. Prepare a list of recommended job requirements
     and qualifications that align with the company's needs and values.
+
+    # 基于招聘需求，确定理想候选人应具备的关键技能、经验和素质。
+    # 考虑公司当前项目、竞争格局和行业趋势。
+    # 准备一份与公司需求和价值观一致的推荐岗位要求和资格列表。
+
   expected_output: >
     A list of recommended skills, experiences, and qualities for the ideal candidate, aligned with
     the company's culture, ongoing projects, and the specific role's requirements.
 
-draft_job_posting_task:
+    # 理想候选人的推荐技能、经验和品质列表，
+    # 与公司文化、正在进行的项目以及该具体岗位的要求相匹配。
+    
+    # ⭐ 注意：此任务在 crew.py 中配置了 output_json=ResearchRoleRequirements
+    # 因此输出将是结构化的 JSON 格式，而非自由文本
+
+draft_job_posting_task:  # =============== 任务3：起草职位描述（核心创作任务）===============
   description: >
     Draft a job posting for the role described by the hiring manager: {hiring_needs}.
     Use the insights on {company_description} to start with a compelling introduction,
     followed by a detailed role description, responsibilities, and required skills and qualifications.
     Ensure the tone aligns with the company's culture and incorporate any unique benefits or
     opportunities offered by the company. Specific benefits: {specific_benefits}.
+
+    # 为招聘岗位起草一份 JD。
+    # 利用对公司描述的洞察，以吸引人的介绍开头，
+    # 然后是详细的岗位职责、责任描述、所需技能和资质。
+    # 确保语气与公司文化一致，并融入公司独特的福利或机会。
+
   expected_output: >
     A detailed, engaging job posting that includes an introduction, role description, responsibilities,
     requirements, and unique company benefits. The tone should resonate with the company's culture
     and values, aimed at attracting the right candidates.
 
-review_and_edit_job_posting_task:
+    # 一份详细、吸引人的职位描述，包括：
+    # 介绍 → 岗位描述 → 工作职责 → 任职要求 → 公司独特福利
+
+review_and_edit_job_posting_task:  # =============== 任务4：审核并编辑职位描述（最终任务）===============
   description: >
     Review the draft job posting for the role {hiring_needs}. Check for clarity, engagement, grammatical accuracy,
     and alignment with the company's culture and values. Edit and refine the content, ensuring it speaks directly
     to the desired candidates and accurately reflects the role's unique benefits and opportunities. Provide
     feedback for any necessary revisions.
+
+    # 审查草稿 JD，检查清晰度、吸引力、语法准确性
+    # 以及与公司文化和价值观的一致性。
+    # 编辑和完善内容，确保直接面向目标候选人说话，
+    # 准确反映职位的独特福利和机会。
+
   expected_output: >
     A polished, error-free job posting that is clear, engaging, and perfectly aligned with the company's culture and values.
     Feedback on potential improvements and final approval for publishing. Formatted in markdown.
 
-industry_analysis_task:
+    # 一份经过润色、无错误的 JD，清晰、吸引人且完美契合公司文化和价值观。
+    # 包含潜在改进的反馈和最终发布批准。使用 Markdown 格式输出。
+
+industry_analysis_task:  # =============== 任务5：行业分析（可选补充任务）===============
   description: >
     Conduct an in-depth analysis of the industry related to the company's domain {company_domain}.
     Investigate current trends, challenges, and opportunities within the industry, utilizing market reports,
@@ -49,7 +110,16 @@ industry_analysis_task:
     for and the overall attractiveness of the position to potential candidates.
     Consider how the company's position within this industry and its response to these trends could be leveraged to attract top talent.
     Include in your report how the role contributes to addressing industry challenges or seizing opportunities.
+
+    # 对公司所在行业进行深入分析。
+    # 调查行业内的当前趋势、挑战和机会，利用市场报告、最新发展和专家意见。
+    # 评估这些因素可能如何影响正在招聘的岗位以及对潜在候选人的整体吸引力。
+    # 考虑公司在行业中的地位及其对这些趋势的反应如何用于吸引顶尖人才。
+
   expected_output: >
     A detailed analysis report that identifies major industry trends, challenges, and opportunities relevant
     to the company's domain and the specific job role. This report should provide strategic insights on positioning
     the job role and the company as an attractive choice for potential candidates.
+
+    # 一份详尽的分析报告，识别与公司领域和具体岗位相关的主要行业趋势、挑战和机会。
+    # 该报告应提供关于如何将该岗位和公司定位为对潜在候选人有吸引力的战略性见解。
